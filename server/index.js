@@ -12,25 +12,26 @@ console.log("MONGO_URI exists?", !!process.env.MONGO_URI);
 
 const app = express();
 
-// middleware
-app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    credentials: true,
-  })
-);
-
+// ✅ CORS: allow both localhost (dev) and your Netlify site
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://skillbridgeroadmap.netlify.app/",
+  "https://skillbridgeroadmap.netlify.app", // your Netlify URL
 ];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error("Not allowed by CORS"));
+      }
+      return callback(null, true);
+    },
   })
 );
+
+app.use(express.json());
 
 // routes
 app.get("/", (req, res) => {
