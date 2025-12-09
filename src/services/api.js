@@ -16,7 +16,14 @@ export const signupRequest = async (payload) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  return handleResponse(res);
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    const message = data.message || data.error || "Request failed";
+    throw new Error(message);
+  }
+
+  return res.json();
 };
 
 export const loginRequest = async (payload) => {
