@@ -21,6 +21,17 @@ app.use(
   })
 );
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://skillbridgeroadmap.netlify.app/",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+  })
+);
+
 // routes
 app.get("/", (req, res) => {
   res.send("SkillBridge API is running");
