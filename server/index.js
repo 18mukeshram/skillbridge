@@ -16,12 +16,21 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://skillbridgeroadmap.netlify.app", // your Netlify URL
-  "https://skillbridge-silk.vercel.app/",
+  "https://skillbridge-5mz3xnspy-sai-mukesh-rams-projects.vercel.app",
 ];
 
 app.use(
   cors({
-    origin: true,
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        return callback(new Error("Not allowed by CORS"));
+      }
+      return callback(null, true);
+    },
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
   })
 );
