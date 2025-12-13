@@ -1,6 +1,6 @@
 ## Live Demo
 
-- Frontend: https://skillbridgeroadmap.netlify.app/
+- Frontend: https://skillbridge-silk.vercel.app/
 - Backend: https://skillbridge-api-aalu.onrender.com
 
 # React + Vite
