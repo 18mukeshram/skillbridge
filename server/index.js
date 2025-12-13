@@ -16,6 +16,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://skillbridgeroadmap.netlify.app", // your Netlify URL
+  "https://skillbridge-silk.vercel.app/",
 ];
 
 app.use(
