@@ -1,42 +1,55 @@
 📘 SkillBridge – Full Project Documentation
-Project Title
-
-SkillBridge – Personalized Learning Roadmap Platform
 
 1. Project Overview
 
-SkillBridge is a full-stack web application designed to help learners follow a structured and personalized roadmap to become Frontend, Backend, or Full-Stack developers.
+SkillBridge is a full-stack web application that helps learners follow a structured and personalized roadmap to become a Frontend, Backend, or Full-Stack developer.
 
-The main idea behind SkillBridge is to remove confusion for beginners by providing a clear learning path, progress tracking, and note-taking functionality in one place.
+The platform provides:
 
-Instead of randomly watching tutorials, users can follow step-by-step roadmaps and track their progress realistically.
+Clear learning roadmaps
 
-2. Why I Built This Project
+Progress tracking
 
-As a learner myself, I noticed that most beginners struggle not because of lack of resources, but because they don’t know what to learn next and how to measure progress.
+Step-level detailed explanations
 
-I built SkillBridge to:
+Personal note-taking
 
-Practice real-world full-stack development
+Persistent user data across sessions
 
-Understand how frontend and backend communicate
+The project is designed to simulate a real-world learning product, not just a demo application.
 
-Learn authentication and database persistence
+2. Motivation & Problem Statement
 
-Build something closer to a real product, not just a demo
+Many beginners struggle with:
 
-This project helped me move from tutorial-based learning to real engineering.
+Choosing what to learn next
 
-3. Tech Stack Used
+Following random tutorials without structure
+
+Tracking real progress
+
+Retaining notes and learning context
+
+SkillBridge solves this by providing:
+
+A predefined learning path
+
+Visual progress indicators
+
+Persistent notes tied to each learning step
+
+This project also served as my transition from frontend-only projects to a complete full-stack system.
+
+3. Tech Stack
    Frontend
 
 React (Vite)
 
 Tailwind CSS
 
-JavaScript (ES6+)
-
 React Router
+
+JavaScript (ES6+)
 
 Backend
 
@@ -54,177 +67,217 @@ MongoDB Atlas
 
 Mongoose ODM
 
-Tools & Platforms
+Tools & Deployment
 
 Git & GitHub
 
 VS Code
 
-Postman / Thunder Client
+Netlify (Frontend)
 
-Netlify (frontend deployment)
+Render (Backend)
 
-Render (backend deployment)
+4. High-Level Architecture
+   Browser (React)
+   ↓ HTTP Requests
+   Express API (Node.js)
+   ↓
+   MongoDB Atlas
 
-4. Application Architecture
+Authentication Flow
 
-The application follows a typical client–server architecture.
+JWT tokens issued on login/signup
 
-Flow:
+Tokens stored in localStorage
 
-User interacts with the React frontend
+Token sent via Authorization header
 
-Frontend sends requests to Express backend APIs
+Backend middleware verifies token for protected routes
 
-Backend validates requests and interacts with MongoDB
+5. How the Application Works (Step-by-Step)
+   Step 1: User Signup / Login
 
-Backend sends JSON responses back to frontend
+User registers or logs in
 
-Frontend updates UI based on response
+Backend validates credentials
 
-Authentication is handled using JWT tokens, which are sent in request headers for protected routes.
+JWT token is generated and returned
 
-5. Key Features Implemented
-   Authentication
+Frontend stores token and updates auth state
 
-User signup and login
+Step 2: Track Selection
 
-JWT-based authentication
+User selects a learning track (Frontend / Backend / Full-Stack)
 
-Protected routes for authenticated users only
+Backend generates roadmap data for that track
 
-Persistent login using localStorage
+Step 3: Roadmap Display
 
-Personalized Roadmaps
+Frontend fetches roadmap via API
 
-Users choose a learning track (Frontend / Backend / Full Stack)
+Steps are displayed with status indicators
 
-Each track has a structured roadmap with multiple steps
+Overall progress percentage is calculated dynamically
 
-Roadmaps are dynamically loaded from backend
+Step 4: Step Interaction
 
-Progress Tracking
+Clicking a step opens a detailed page
 
-Each roadmap step has a status:
+Detailed explanation + resources are shown
 
-Not Started
+User can update step status
 
-In Progress
+Step 5: Notes
 
-Completed
+Each step has a personal notes section
 
-Overall progress percentage updates automatically
+Notes are saved to database
 
-Progress is stored in the database and persists after refresh
+Notes persist across sessions
 
-Step Details Page
+6. API Routes (Backend)
+   Auth Routes
+   Method Route Description
+   POST /api/auth/signup Register new user
+   POST /api/auth/login Authenticate user
+   Roadmap Routes
+   Method Route Description
+   GET /api/roadmap/me Get user roadmap
+   POST /api/roadmap/step/:id/status Update step status
+   Notes Routes
+   Method Route Description
+   GET /api/notes/:stepId Fetch notes
+   POST /api/notes/:stepId Save notes
+7. Database Design (Schemas)
+   User Schema
+   {
+   name: String,
+   email: String,
+   password: String, // hashed
+   track: String
+   }
 
-Clicking on a step opens a detailed page
+Progress Schema
+{
+userId: ObjectId,
+stepId: String,
+status: "not-started" | "in-progress" | "completed"
+}
 
-Each step includes:
+Notes Schema
+{
+userId: ObjectId,
+stepId: String,
+content: String,
+createdAt: Date,
+updatedAt: Date
+}
 
-Explanation of the topic
+8. Example Code Snippets
+   JWT Authentication Middleware
+   export const protect = (req, res, next) => {
+   const token = req.headers.authorization?.split(" ")[1];
+   if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-Suggested learning resources
+const decoded = jwt.verify(token, process.env.JWT_SECRET);
+req.user = decoded;
+next();
+};
 
-Learning goals
+Frontend API Call Example
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-Notes System
+export const signupRequest = async (data) => {
+const res = await fetch(`${API_BASE}/auth/signup`, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify(data),
+});
+return res.json();
+};
 
-Users can write personal notes for each roadmap step
+9. State Management & Persistence
 
-Notes are saved in MongoDB
+Authentication state stored in context
 
-Notes are reloaded whenever the user revisits the step
+Token persisted in localStorage
 
-6. Database Design (High-Level)
+On page reload:
 
-Main collections used:
+App checks token
 
-Users
+Restores user session
 
-name
+Fetches roadmap automatically
 
-email
+10. Deployment Strategy
+    Frontend (Netlify)
 
-password (hashed)
+Built using npm run build
 
-selected track
+Static assets served from dist/
 
-Progress
+Environment variable: VITE_API_BASE_URL
 
-userId
+Backend (Render)
 
-stepId
+Node service
 
-status
+start script: node index.js
 
-Notes
+Environment variables:
 
-userId
+MONGO_URI
 
-stepId
+JWT_SECRET
 
-content
+PORT
 
-timestamps
+11. Major Challenges & Learnings
+    Real Issues Solved
 
-This structure keeps user data modular and scalable.
+ES Module vs CommonJS conflicts
 
-7. Challenges Faced & What I Learned
+Tailwind + Vite configuration issues
 
-This project involved several real-world challenges:
+MongoDB connection errors
 
-CORS issues when connecting Netlify frontend with Render backend
+CORS issues between Netlify and Render
 
-Environment variable handling during deployment
+Auth persistence on page reload
 
-MongoDB connection errors due to invalid URI formats
+Debugging network requests in production
 
-React state issues when handling auth persistence on page reload
+What I Learned
 
-Deployment issues related to missing start scripts and root directories
+How real deployments behave differently from local dev
 
-Debugging network requests using browser DevTools and backend logs
+How frontend and backend failures surface
 
-Solving these issues gave me strong confidence in debugging and understanding full-stack systems.
+How to debug systematically instead of guessing
 
-8. Deployment Details
+12. Future Improvements
 
-Frontend deployed on Netlify
+Automated backend tests
 
-Backend deployed on Render
+Admin panel for roadmap management
 
-MongoDB hosted on MongoDB Atlas
+Calendar-based learning schedules
 
-Environment variables configured securely on both platforms
+AI-powered resource recommendations
 
-The deployed application supports full authentication, roadmap loading, and data persistence.
-
-9. Future Improvements
-
-Add automated tests for backend APIs
-
-Add user profile editing
-
-Add calendar-based learning plans
-
-Improve roadmap customization
-
-Add admin panel to manage roadmaps
-
-10. What This Project Demonstrates
+13. What This Project Demonstrates
 
 This project demonstrates my ability to:
 
-Build complete full-stack applications
+Build and deploy full-stack applications
 
-Design REST APIs
+Design RESTful APIs
 
-Handle authentication securely
+Implement authentication
 
 Work with databases
 
-Debug real deployment issues
+Debug real-world production issues
 
-Understand production-like workflows
+Write clear technical documentation
