@@ -98,10 +98,10 @@ const Dashboard = ({ auth, authReady }) => {
     }
 
     // 🔒 REAL AUTH REQUIRED
-    if (!auth?.token) {
-      navigate("/login");
-      return;
-    }
+    // if (!auth?.token) {
+    //   navigate("/login");
+    //   return;
+    // }
 
     // 🌐 REAL API MODE
     fetchRoadmap();

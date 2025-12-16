@@ -78,7 +78,13 @@ function App() {
           {/* Dashboard */}
           <Route
             path="/dashboard"
-            element={<Dashboard auth={auth} authReady={authReady} />}
+            element={
+              auth?.user ? (
+                <Dashboard auth={auth} authReady={authReady} />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
           />
 
           {/* Roadmap step details (with notes) */}
