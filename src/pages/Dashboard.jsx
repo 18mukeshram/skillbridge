@@ -115,10 +115,9 @@ const Dashboard = ({ auth, authReady }) => {
     );
   }
 
-  if (authReady && !auth?.token) {
+  if (authReady && !auth?.token && !auth?.user?.isDemo) {
     return null;
   }
-
   return (
     <section className="max-w-6xl mx-auto px-4 py-8 space-y-6">
       <header className="flex justify-between items-center flex-wrap gap-2">
