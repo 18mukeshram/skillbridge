@@ -44,10 +44,10 @@ const Landing = ({ user }) => {
                   Get started for free
                 </Link>
                 <Link
-                  to="/dashboard"
+                  to="/login"
                   className="px-4 py-2.5 rounded-xl border border-slate-700 hover:border-indigo-500 text-sm"
                 >
-                  View demo dashboard
+                  Try demo
                 </Link>
               </>
             )}
