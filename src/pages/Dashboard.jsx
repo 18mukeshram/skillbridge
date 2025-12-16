@@ -16,6 +16,7 @@ const Dashboard = ({ auth, authReady }) => {
 
   // helper to recompute progress from steps
   const computeProgress = (steps) => {
+    if (!Array.isArray(steps)) return 0;
     const realSteps = steps.filter((s) => s.status !== "info");
     if (realSteps.length === 0) return 0;
     const completed = realSteps.filter((s) => s.status === "completed").length;
@@ -82,17 +83,24 @@ const Dashboard = ({ auth, authReady }) => {
     // ✅ DEMO MODE
     if (auth?.user?.isDemo) {
       const demo = localStorage.getItem("demoRoadmap");
-      if (demo) {
-        const steps = JSON.parse(demo);
-        setRoadmap(steps);
-        setUserMeta({
-          name: auth.user.name,
-          targetRole: auth.user.role || "Developer",
-          dailyHours: auth.user.dailyHours || 2,
-          progress: computeProgress(steps),
-        });
-        setSelectedStep(steps[0] || null);
+
+      let steps = [];
+      try {
+        const parsed = JSON.parse(demo);
+        steps = Array.isArray(parsed) ? parsed : [];
+      } catch {
+        steps = [];
       }
+
+      setRoadmap(steps);
+      setUserMeta({
+        name: auth.user.name,
+        targetRole: auth.user.role || "Frontend Developer",
+        dailyHours: auth.user.dailyHours || 2,
+        progress: computeProgress(steps),
+      });
+
+      setSelectedStep(steps[0] || null);
       setLoading(false);
       return;
     }

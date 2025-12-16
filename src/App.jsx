@@ -82,7 +82,7 @@ function App() {
               auth?.user ? (
                 <Dashboard auth={auth} authReady={authReady} />
               ) : (
-                <Navigate to="/login" replace />
+                <navigate to="/login" replace />
               )
             }
           />

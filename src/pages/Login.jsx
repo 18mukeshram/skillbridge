@@ -42,6 +42,7 @@ const Login = ({ onAuthSuccess }) => {
     // Use SAME storage key as real auth
     onAuthSuccess(demoUserData, "demo-token");
 
+    localStorage.removeItem("demoRoadmap");
     // Store demo roadmap separately
     localStorage.setItem("demoRoadmap", JSON.stringify(demoRoadmap));
 
