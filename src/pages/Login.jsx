@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginRequest } from "../services/api";
+import { demoUser } from "../demo/demoUser";
+import { demoRoadmap } from "../demo/demoRoadmap";
 
 const Login = ({ onAuthSuccess }) => {
   const [form, setForm] = useState({
@@ -31,6 +33,20 @@ const Login = ({ onAuthSuccess }) => {
     }
   };
 
+  const handleDemoLogin = () => {
+    const demoUserData = {
+      ...demoUser,
+      isDemo: true,
+    };
+
+    // Use SAME storage key as real auth
+    onAuthSuccess(demoUserData, "demo-token");
+
+    // Store demo roadmap separately
+    localStorage.setItem("demoRoadmap", JSON.stringify(demoRoadmap));
+
+    navigate("/dashboard");
+  };
   return (
     <section className="max-w-md mx-auto px-4 py-10">
       <h2 className="text-2xl font-semibold mb-2">Welcome back</h2>
@@ -76,6 +92,9 @@ const Login = ({ onAuthSuccess }) => {
           className="w-full rounded-xl bg-indigo-500 hover:bg-indigo-600 disabled:opacity-60 py-2 text-sm font-medium"
         >
           {loading ? "Logging in..." : "Log in"}
+        </button>
+        <button onClick={handleDemoLogin} className="secondary-btn">
+          Try Demo
         </button>
       </form>
     </section>

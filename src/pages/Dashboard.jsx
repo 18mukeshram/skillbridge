@@ -42,7 +42,7 @@ const Dashboard = ({ auth, authReady }) => {
   }, [auth?.token]);
 
   const handleStatusToggle = async (step) => {
-    if (!auth?.token || step.status === "info") return;
+    if (step.status === "info") return;
 
     const order = ["not-started", "in-progress", "completed"];
     const currentIndex = order.indexOf(step.status);
@@ -61,6 +61,12 @@ const Dashboard = ({ auth, authReady }) => {
       return updated;
     });
 
+    // ✅ Demo mode
+    if (auth?.user?.isDemo) return;
+
+    // 🔒 Real mode → API call
+    if (!auth?.token) return;
+
     try {
       await updateStepStatusRequest(auth.token, step.id, nextStatus);
       // optional: re-sync from server if you want
@@ -73,13 +79,33 @@ const Dashboard = ({ auth, authReady }) => {
   useEffect(() => {
     if (!authReady) return;
 
+    // ✅ DEMO MODE
+    if (auth?.user?.isDemo) {
+      const demo = localStorage.getItem("demoRoadmap");
+      if (demo) {
+        const steps = JSON.parse(demo);
+        setRoadmap(steps);
+        setUserMeta({
+          name: auth.user.name,
+          targetRole: auth.user.role || "Developer",
+          dailyHours: auth.user.dailyHours || 2,
+          progress: computeProgress(steps),
+        });
+        setSelectedStep(steps[0] || null);
+      }
+      setLoading(false);
+      return;
+    }
+
+    // 🔒 REAL AUTH REQUIRED
     if (!auth?.token) {
       navigate("/login");
       return;
     }
 
+    // 🌐 REAL API MODE
     fetchRoadmap();
-  }, [authReady, auth?.token, navigate, fetchRoadmap]);
+  }, [authReady, auth, navigate, fetchRoadmap]);
 
   if (!authReady) {
     return (
@@ -107,7 +133,7 @@ const Dashboard = ({ auth, authReady }) => {
           </p>
         </div>
         <span className="text-[11px] px-3 py-1 rounded-full border border-slate-700 text-slate-300">
-          Mode: Connected to API
+          Mode: {auth?.user?.isDemo ? "Demo" : "Connected to API"}
         </span>
       </header>
 
