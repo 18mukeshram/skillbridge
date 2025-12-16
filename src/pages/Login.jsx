@@ -93,7 +93,11 @@ const Login = ({ onAuthSuccess }) => {
         >
           {loading ? "Logging in..." : "Log in"}
         </button>
-        <button onClick={handleDemoLogin} className="secondary-btn">
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          className="secondary-btn"
+        >
           Try Demo
         </button>
       </form>
