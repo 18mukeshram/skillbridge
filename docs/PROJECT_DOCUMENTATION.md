@@ -1,6 +1,6 @@
 📘 SkillBridge – Full Project Documentation
 
-1. Project Overview
+## 1. Project Overview
 
 SkillBridge is a full-stack web application that helps learners follow a structured and personalized roadmap to become a Frontend, Backend, or Full-Stack developer.
 
@@ -18,7 +18,7 @@ Persistent user data across sessions
 
 The project is designed to simulate a real-world learning product, not just a demo application.
 
-2. Motivation & Problem Statement
+## 2. Motivation & Problem Statement
 
 Many beginners struggle with:
 
@@ -40,8 +40,9 @@ Persistent notes tied to each learning step
 
 This project also served as my transition from frontend-only projects to a complete full-stack system.
 
-3. Tech Stack
-   Frontend
+## 3. Tech Stack
+
+Frontend
 
 React (Vite)
 
@@ -77,12 +78,13 @@ Netlify (Frontend)
 
 Render (Backend)
 
-4. High-Level Architecture
-   Browser (React)
-   ↓ HTTP Requests
-   Express API (Node.js)
-   ↓
-   MongoDB Atlas
+## 4. High-Level Architecture
+
+Browser (React)
+↓ HTTP Requests
+Express API (Node.js)
+↓
+MongoDB Atlas
 
 Authentication Flow
 
@@ -94,8 +96,9 @@ Token sent via Authorization header
 
 Backend middleware verifies token for protected routes
 
-5. How the Application Works (Step-by-Step)
-   Step 1: User Signup / Login
+## 5. How the Application Works (Step-by-Step)
+
+Step 1: User Signup / Login
 
 User registers or logs in
 
@@ -135,27 +138,40 @@ Notes are saved to database
 
 Notes persist across sessions
 
-6. API Routes (Backend)
-   Auth Routes
-   Method Route Description
-   POST /api/auth/signup Register new user
-   POST /api/auth/login Authenticate user
-   Roadmap Routes
-   Method Route Description
-   GET /api/roadmap/me Get user roadmap
-   POST /api/roadmap/step/:id/status Update step status
-   Notes Routes
-   Method Route Description
-   GET /api/notes/:stepId Fetch notes
-   POST /api/notes/:stepId Save notes
-7. Database Design (Schemas)
-   User Schema
-   {
-   name: String,
-   email: String,
-   password: String, // hashed
-   track: String
-   }
+## 6. Demo Mode Design
+
+Demo mode was intentionally designed to:
+
+- Mirror real API behavior
+- Prevent blank screens during backend downtime
+- Provide recruiters a live, interactive preview
+
+Demo data is stored in `localStorage` and follows the same shape as real API responses.
+
+## 7. API Routes (Backend)
+
+Auth Routes
+Method Route Description
+POST /api/auth/signup Register new user
+POST /api/auth/login Authenticate user
+Roadmap Routes
+Method Route Description
+GET /api/roadmap/me Get user roadmap
+POST /api/roadmap/step/:id/status Update step status
+Notes Routes
+Method Route Description
+GET /api/notes/:stepId Fetch notes
+POST /api/notes/:stepId Save notes
+
+## 8. Database Design (Schemas)
+
+User Schema
+{
+name: String,
+email: String,
+password: String, // hashed
+track: String
+}
 
 Progress Schema
 {
@@ -173,11 +189,12 @@ createdAt: Date,
 updatedAt: Date
 }
 
-8. Example Code Snippets
-   JWT Authentication Middleware
-   export const protect = (req, res, next) => {
-   const token = req.headers.authorization?.split(" ")[1];
-   if (!token) return res.status(401).json({ message: "Unauthorized" });
+## 9. Example Code Snippets
+
+JWT Authentication Middleware
+export const protect = (req, res, next) => {
+const token = req.headers.authorization?.split(" ")[1];
+if (!token) return res.status(401).json({ message: "Unauthorized" });
 
 const decoded = jwt.verify(token, process.env.JWT_SECRET);
 req.user = decoded;
@@ -196,7 +213,7 @@ body: JSON.stringify(data),
 return res.json();
 };
 
-9. State Management & Persistence
+## 10. State Management & Persistence
 
 Authentication state stored in context
 
@@ -210,7 +227,8 @@ Restores user session
 
 Fetches roadmap automatically
 
-10. Deployment Strategy
+## 11. Deployment Strategy
+
     Frontend (Netlify)
 
 Built using npm run build
@@ -233,7 +251,8 @@ JWT_SECRET
 
 PORT
 
-11. Major Challenges & Learnings
+## 12. Major Challenges & Learnings
+
     Real Issues Solved
 
 ES Module vs CommonJS conflicts
@@ -256,7 +275,7 @@ How frontend and backend failures surface
 
 How to debug systematically instead of guessing
 
-12. Future Improvements
+## 13. Future Improvements
 
 Automated backend tests
 
@@ -266,7 +285,7 @@ Calendar-based learning schedules
 
 AI-powered resource recommendations
 
-13. What This Project Demonstrates
+## 14. What This Project Demonstrates
 
 This project demonstrates my ability to:
 

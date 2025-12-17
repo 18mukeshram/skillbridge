@@ -129,6 +129,12 @@ const Dashboard = ({ auth, authReady }) => {
   return (
     <section className="max-w-6xl mx-auto px-4 py-8 space-y-6">
       <header className="flex justify-between items-center flex-wrap gap-2">
+        {auth?.user?.isDemo && (
+          <div className="rounded-xl border border-indigo-500/40 bg-indigo-500/10 px-4 py-2 text-xs text-indigo-300">
+            You are viewing a demo dashboard with sample data. Backend services
+            are not required in demo mode.
+          </div>
+        )}
         <div>
           <h1 className="text-2xl font-semibold mb-1">Dashboard</h1>
           <p className="text-xs text-slate-400">
