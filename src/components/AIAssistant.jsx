@@ -52,6 +52,9 @@ const AIAssistant = ({ token, isDemo, stepContext }) => {
     <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4 space-y-4">
       <div className="space-y-1">
         <h2 className="text-sm font-semibold">Ask SkillBridge AI</h2>
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+          ✨ AI-powered
+        </span>
         <p className="text-xs text-slate-400">
           Get beginner-friendly explanations and guidance for this step.
         </p>
