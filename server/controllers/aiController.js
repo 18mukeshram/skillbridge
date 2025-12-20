@@ -1,9 +1,5 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export const askAI = async (req, res) => {
   try {
     const { question, stepContext } = req.body;
@@ -12,7 +8,16 @@ export const askAI = async (req, res) => {
       return res.status(400).json({ message: "Question is required" });
     }
 
-    // ---- Prompt Design (Explicit & Explainable) ----
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ message: "AI service is not configured" });
+    }
+
+    // Create client lazily (prevents server crash on startup)
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    });
+
+    // ---- Prompt Design ----
     const systemPrompt = `
 You are a friendly programming mentor.
 Explain concepts in very simple language.
@@ -31,11 +36,6 @@ Goal: ${stepContext.outcome || "N/A"}
 `
       : "";
 
-    const userPrompt = `
-Student question:
-"${question}"
-`;
-
     const constraints = `
 Rules:
 - Keep the answer under 200 words
@@ -43,11 +43,9 @@ Rules:
 - Be practical and beginner-friendly
 `;
 
-    const finalPrompt = `
-${systemPrompt}
-${contextPrompt}
-${constraints}
-${userPrompt}
+    const userPrompt = `
+Student question:
+"${question}"
 `;
 
     const response = await client.chat.completions.create({
