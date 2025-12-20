@@ -148,6 +148,54 @@ Demo mode was intentionally designed to:
 
 Demo data is stored in `localStorage` and follows the same shape as real API responses.
 
+## 6.1 AI Assistant Feature (New)
+
+SkillBridge includes an AI-powered learning assistant designed to enhance the step-level learning experience.
+
+The AI assistant is available on the Step Details page and helps users:
+
+Understand roadmap steps in simple language
+
+Ask clarifying questions about concepts
+
+Get guidance such as “What should I focus on next?”
+
+Key Characteristics
+
+Context-aware
+The AI receives structured context including:
+
+Step title
+
+Focus area
+
+Topics
+
+Learning outcome
+
+Beginner-friendly responses
+Prompt design enforces:
+
+Simple language
+
+Step-by-step explanations
+
+Concise output
+
+Authenticated backend integration
+
+AI requests are handled via a secure backend route
+
+OpenAI API keys are never exposed to the frontend
+
+Graceful degradation
+
+In demo mode or when API quota is unavailable, the UI remains functional
+
+Users see a clear message indicating temporary AI unavailability
+
+This design ensures the AI feature adds value without compromising stability or demo accessibility.
+
 ## 7. API Routes (Backend)
 
 Auth Routes
@@ -162,6 +210,13 @@ Notes Routes
 Method Route Description
 GET /api/notes/:stepId Fetch notes
 POST /api/notes/:stepId Save notes
+AI Routes (New)
+Method | Route | Description
+POST | /api/ai/ask | Authenticated AI assistant endpoint
+The endpoint:
+Accepts user questions
+Receives roadmap step context
+Returns beginner-friendly explanations generated via an LLM
 
 ## 8. Database Design (Schemas)
 
@@ -275,6 +330,28 @@ How frontend and backend failures surface
 
 How to debug systematically instead of guessing
 
+## 12.1 AI Integration Challenges & Learnings
+
+During AI integration, the following real-world challenges were addressed:
+
+Securely integrating a third-party LLM API via backend-only access
+
+Handling missing environment variables without crashing the server
+
+Managing API quota limits gracefully in production
+
+Designing structured prompts instead of ad-hoc queries
+
+Ensuring demo mode remained unaffected by AI availability
+
+These challenges reinforced best practices around:
+
+Defensive backend design
+
+Feature isolation
+
+Production-safe AI integration
+
 ## 13. Future Improvements
 
 Automated backend tests
@@ -283,7 +360,9 @@ Admin panel for roadmap management
 
 Calendar-based learning schedules
 
-AI-powered resource recommendations
+Expand AI assistant capabilities (resource recommendations, learning summaries)
+
+AI-driven progress insights and learning suggestions
 
 ## 14. What This Project Demonstrates
 
