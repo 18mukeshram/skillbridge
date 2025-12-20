@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { stepDetails } from "../data/stepDetails";
 import { getNoteRequest, saveNoteRequest } from "../services/api";
+import AIAssistant from "../components/AIAssistant";
 
 const StepDetailsPage = () => {
   const { id } = useParams();
@@ -36,6 +37,26 @@ const StepDetailsPage = () => {
     } catch {
       return null;
     }
+  };
+
+  const token = getToken();
+
+  const isDemo = (() => {
+    try {
+      const stored = localStorage.getItem("skillbridge_auth");
+      if (!stored) return false;
+      const parsed = JSON.parse(stored);
+      return parsed.user?.isDemo === true;
+    } catch {
+      return false;
+    }
+  })();
+
+  const stepContext = {
+    title,
+    focus,
+    topics: detail?.topics || [],
+    outcome: detail?.outcome || "",
   };
 
   // Load note
@@ -197,6 +218,7 @@ const StepDetailsPage = () => {
           this step as a milestone and attach your own notes and resources.
         </p>
       )}
+      <AIAssistant token={token} isDemo={isDemo} stepContext={stepContext} />
     </section>
   );
 };
