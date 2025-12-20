@@ -1,5 +1,5 @@
 # Architecture
 
-Frontend → React (Netlify)
+Frontend → React (Vercel)
 Backend → Express (Render)
 Database → MongoDB Atlas
