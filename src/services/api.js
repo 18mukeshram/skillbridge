@@ -88,3 +88,16 @@ export const updateStepStatusRequest = async (token, stepId, status) => {
   });
   return handleResponse(res);
 };
+
+export const askAIRequest = async (token, payload) => {
+  const res = await fetch(`${API_URL}/ai/ask`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  return handleResponse(res);
+};
